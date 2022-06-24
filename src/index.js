@@ -1,5 +1,4 @@
 const pngtiny = require('../plugins/pngtiny')
-
 /**
  * @description: 图像压缩
  * @param {Buffer} buffer 图片二进制数据流

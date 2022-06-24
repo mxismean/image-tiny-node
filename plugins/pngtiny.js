@@ -1,41 +1,56 @@
 
-  const https = require('https');
+  var fs = require('fs');
+  var path = require('path');
   var pngtiny = {};
+
+  // const https = require('https');
+  // function readWasm() {
+  //   return new Promise((resolve, reject)=>{
+  //     https.get('https://bb-s1.oss-cn-shanghai.aliyuncs.com/w-admin-clover-node/pngtiny-custom.wasm',res => {
+  //       const chunks = [];
+  //       let size = 0;
+  //       if(res.statusCode === 200) { 
+  //         res.on('data', (chunk) => {
+  //           chunks.push(chunk);
+  //           size += chunk.length;
+  //         });
+  //         res.on('end', ()=> {
+  //           switch(chunks.length) {
+  //             case 0:
+  //               data = Buffer.alloc(0);
+  //               break;
+  //             case 1:
+  //               data = chunks[0];
+  //               break;
+  //             default:
+  //               data = Buffer.alloc(size);
+  //               for(let i = 0,pos = 0,l = chunks.length; i<l;i++) {
+  //                 let chunk = chunks[i];
+  //                 chunk.copy(data, pos);
+  //                 pos += chunk.length;
+  //               }
+  //               break;
+  //           }
+  //           resolve(data)
+  //         })
+  //       }
+
+  //     }).on('error', (e) => {
+  //       reject(e);
+  //     });
+  //   })
+  // }
 
   function readWasm() {
     return new Promise((resolve, reject)=>{
-      https.get('https://bb-s1.oss-cn-shanghai.aliyuncs.com/w-admin-clover-node/pngtiny-custom.wasm',res => {
-        const chunks = [];
-        let size = 0;
-        if(res.statusCode === 200) {
-          res.on('data', (chunk) => {
-            chunks.push(chunk);
-            size += chunk.length;
-          });
-          res.on('end', ()=> {
-            switch(chunks.length) {
-              case 0:
-                data = Buffer.alloc(0);
-                break;
-              case 1:
-                data = chunks[0];
-                break;
-              default:
-                data = Buffer.alloc(size);
-                for(let i = 0,pos = 0,l = chunks.length; i<l;i++) {
-                  let chunk = chunks[i];
-                  chunk.copy(data, pos);
-                  pos += chunk.length;
-                }
-                break;
-            }
-            resolve(data)
-          })
-        }
-
-      }).on('error', (e) => {
-        reject(e);
-      });
+      try {
+        fs.readFile(path.join(__dirname, './pngtiny-custom.wasm'), (err, data) => {
+          if (err) throw err;
+          resolve(data);
+        })
+      } catch (error) {
+        reject(error)
+      }
     })
   }
 
@@ -437,6 +452,7 @@
   (function () {
     function a(d) {
       b.asm = d.exports;
+
       D = b.asm.memory;
       ea();
       fa = b.asm.__indirect_function_table;
